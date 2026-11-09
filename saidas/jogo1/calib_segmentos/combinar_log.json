@@ -1,0 +1,74 @@
+[
+  {
+    "seg": 0,
+    "ancoras": 2,
+    "icp_ok": 208,
+    "icp_rej": 0
+  },
+  {
+    "seg": 1,
+    "ancoras": 1,
+    "icp_ok": 24,
+    "icp_rej": 0
+  },
+  {
+    "seg": 2,
+    "ancoras": 1,
+    "icp_ok": 22,
+    "icp_rej": 0
+  },
+  {
+    "seg": 3,
+    "ancoras": 1,
+    "icp_ok": 66,
+    "icp_rej": 0
+  },
+  {
+    "seg": 4,
+    "ancoras": 1,
+    "icp_ok": 36,
+    "icp_rej": 0
+  },
+  {
+    "seg": 5,
+    "ancoras": 1,
+    "icp_ok": 15,
+    "icp_rej": 0
+  },
+  {
+    "seg": 6,
+    "ancoras": 1,
+    "icp_ok": 27,
+    "icp_rej": 0
+  },
+  {
+    "seg": 7,
+    "ancoras": 1,
+    "icp_ok": 47,
+    "icp_rej": 0
+  },
+  {
+    "seg": 8,
+    "ancoras": 3,
+    "icp_ok": 159,
+    "icp_rej": 1
+  },
+  {
+    "seg": 9,
+    "ancoras": 1,
+    "icp_ok": 24,
+    "icp_rej": 0
+  },
+  {
+    "seg": 10,
+    "ancoras": 1,
+    "icp_ok": 91,
+    "icp_rej": 0
+  },
+  {
+    "seg": 11,
+    "ancoras": 2,
+    "icp_ok": 75,
+    "icp_rej": 0
+  }
+]

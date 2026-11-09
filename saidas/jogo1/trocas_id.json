@@ -1,0 +1,16 @@
+{
+  "fonte": "saidas/jogo1/tracks.csv e ids_por_minuto.csv (yolov8m, imgsz 1280, ByteTrack)",
+  "esperado_por_minuto": "~22 jogadores + 3 arbitros",
+  "ids_unicos_minuto_0": 358,
+  "ids_com_mais_de_1s_minuto_0": 109,
+  "mediana_duracao_id_s": 0.5,
+  "total_ids": 1775,
+  "exemplos": [
+    {"frame": 2985, "t_s": 99.5, "novos_ids_no_segundo": 30,
+     "motivo": "Close em jogador e transicao (wipe) de volta para a camera aberta: o ByteTrack perde todos os tracks no corte e recria IDs."},
+    {"frame": 6270, "t_s": 209.0, "novos_ids_no_segundo": 25,
+     "motivo": "Close de jogador caido com banco de reservas e comissao tecnica no quadro: pessoas fora de campo detectadas como 'person' e atribuidas a um time (T0)."},
+    {"frame": 8880, "t_s": 296.0, "novos_ids_no_segundo": 40,
+     "motivo": "Camera baixa de beira de campo no lance antes do gol: torcedores e fotografos atras do jogador geram dezenas de deteccoes curtas; oclusao entre jogadores."}
+  ]
+}

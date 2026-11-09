@@ -1,0 +1,6 @@
+﻿{
+  "0": {"time": "Coreia do Sul", "uniforme": "vermelho", "centroide_bgr": [86, 89, 176]},
+  "1": {"time": "Brasil", "uniforme": "amarelo", "centroide_bgr": [46, 229, 217]},
+  "ataque_time0": "esquerda",
+  "observacao": "1o tempo: Brasil (time 1) ataca para a direita da imagem; Coreia (time 0) para a esquerda. Centroides de saidas/jogo1/meta.json (k=2)."
+}

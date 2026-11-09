@@ -1,0 +1,3 @@
+Tracks de pessoa: 358 | no cluster extra (time = -2): 160
+Detecções de pessoa no cluster extra: 9.6%
+Tracks do cluster extra com >= 30 quadros: 18

@@ -1,0 +1,62 @@
+[
+  {
+    "seg": 0,
+    "quadros": 1784,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 1,
+    "quadros": 248,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 2,
+    "quadros": 219,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 3,
+    "quadros": 659,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 4,
+    "quadros": 363,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 5,
+    "quadros": 151,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 6,
+    "quadros": 275,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 7,
+    "quadros": 479,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 8,
+    "quadros": 851,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 9,
+    "quadros": 249,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 10,
+    "quadros": 901,
+    "falhas_lk": 0
+  },
+  {
+    "seg": 11,
+    "quadros": 489,
+    "falhas_lk": 0
+  }
+]

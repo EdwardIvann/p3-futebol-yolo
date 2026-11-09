@@ -1,0 +1,34 @@
+﻿{
+  "unidade": "m",
+  "raio_posse": 2.0,
+  "direcao_ataque": {
+    "0": "esquerda",
+    "1": "direita"
+  },
+  "quadros_com_bola": 5089,
+  "quadros_total": 9390,
+  "time0": {
+    "posse_pct": 44.7,
+    "passes": 15,
+    "passes_certos": 11,
+    "precisao_pct": 73.3,
+    "distancia_total": 5416.4
+  },
+  "time1": {
+    "posse_pct": 55.3,
+    "passes": 23,
+    "passes_certos": 18,
+    "precisao_pct": 78.3,
+    "distancia_total": 4014.0
+  }
+}
+
+Top 5 distância (m):
+ track_id  time  quadros   tempo_s  distancia  vel_media  vel_max  vel_max_kmh
+        9     0     1372 45.733333 134.274442   2.957587 6.368171    22.925414
+        6     0     1485 49.500000 131.163883   2.662325 6.310979    22.719525
+      174     1     1306 43.533333 127.769253   2.946255 5.150008    18.540028
+      173     0     1082 36.066667  99.806705   2.726959 6.404955    23.057837
+     1416     1     1041 34.700000  99.177994   2.888679 5.416517    19.499463
+
+38 passes → ..\saidas\jogo1\passes.csv  |  figuras em ..\saidas\jogo1\figuras/

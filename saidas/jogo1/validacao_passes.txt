@@ -1,0 +1,5 @@
+Detectados: 38 | Anotados: 65 | Casados: 24
+Precisão  : 0.63
+Revocação : 0.37
+F1        : 0.47
+Acordo certo/errado nos casados: 0.83

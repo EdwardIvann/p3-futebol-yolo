@@ -1,0 +1,11 @@
+{
+  "arquivo": "dados/videos/bra_kor_clip.mp4",
+  "url": "https://www.youtube.com/watch?v=JIQnnYy7qYk",
+  "intervalo_video": "04:11-09:24",
+  "largura": 1280,
+  "altura": 720,
+  "fps": 30.0,
+  "n_quadros_metadata": 9390,
+  "n_quadros_lidos": 9390,
+  "duracao_s": 313.0
+}

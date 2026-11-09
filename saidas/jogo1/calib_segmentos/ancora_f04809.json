@@ -1,0 +1,81 @@
+{
+  "frame": 4809,
+  "pixels": [
+    [
+      629.5,
+      135.8
+    ],
+    [
+      842.5,
+      211.5
+    ],
+    [
+      275,
+      470.8
+    ],
+    [
+      709.3,
+      271.5
+    ],
+    [
+      516.3,
+      361
+    ],
+    [
+      180,
+      337
+    ]
+  ],
+  "marcos": [
+    "canto_sup_esq",
+    "ga_esq_sup",
+    "ga_esq_inf",
+    "meia_lua_esq_sup",
+    "meia_lua_esq_inf",
+    "pa_esq_inf"
+  ],
+  "H": [
+    [
+      0.06704034080148649,
+      0.2133137622379952,
+      -71.07532210044187
+    ],
+    [
+      -0.03251645728434912,
+      0.43098850898191343,
+      -38.0868463555034
+    ],
+    [
+      -2.526509650325668e-06,
+      0.00400210146860295,
+      1.0
+    ]
+  ],
+  "erro_marcos_m": [
+    0.064,
+    0.094,
+    0.124,
+    0.106,
+    0.131,
+    0.025
+  ],
+  "erro_linhas_m": [],
+  "ajuste_linhas": {
+    "ok": true,
+    "n_obs": 150,
+    "linhas": [
+      "fundo_esq",
+      "ga_esq",
+      "ga_esq_inf",
+      "ga_esq_sup",
+      "lateral_inf",
+      "lateral_sup",
+      "meia_lua_esq",
+      "pa_esq",
+      "pa_esq_inf",
+      "pa_esq_sup"
+    ],
+    "residuo_mediano_m": 0.033,
+    "inliers_pct": 100.0
+  }
+}

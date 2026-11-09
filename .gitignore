@@ -1,0 +1,27 @@
+# vídeos ficam no Google Drive (penalidade -10% se versionados)
+*.mp4
+*.mkv
+*.webm
+*.avi
+*.mov
+dados/videos/
+# pesos YOLO baixados automaticamente
+*.pt
+# python
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+
+# backups locais da anotação de passes
+saidas/jogo1/backup_anotacao/
+
+# configuração local do app / auxiliares fora da entrega
+.claude/
+src/anotar_passes.py
+saidas/jogo1_marcos_sugeridos.jpg
+
+SPEC.md
+src/verificar_entrega.py
+
+# guia interno da equipe
+GUIA_EQUIPE.md

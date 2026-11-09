@@ -1,0 +1,25 @@
+Tolerância 1.0 s, mesmo time. Detectados 38 | Anotados 65 | Casados 24
+Precisão 0.63 | Revocação 0.37 | F1 0.47
+
+Por time:
+  Brasil: detectados 23, anotados 45, casados 16 → precisão 0.70, revocação 0.36
+  Coreia: detectados 15, anotados 20, casados 8 → precisão 0.53, revocação 0.40
+
+Taxa de acerto de passe (certos / total):
+  Brasil: anotado 38/45 = 84.4% | detectado 18/23 = 78.3%
+  Coreia: anotado 15/20 = 75.0% | detectado 11/15 = 73.3%
+
+Falsos negativos (anotados não detectados): 41 de 65
+  certo: 30 de 53 anotados (57% perdidos)
+  interceptado: 10 de 11 anotados (91% perdidos)
+  fora: 1 de 1 anotados (100% perdidos)
+  bola com posição no campo em < 50% do trecho: 12 de 41 (nos casados: 1 de 24)
+  duração mediana do passe: perdidos 1.44 s × casados 1.45 s
+  passes < 0,7 s (toques curtos): perdidos 2 × casados 0
+
+Falsos positivos (detectados sem anotação): 14 de 38
+  sem passe anotado perto (ruído de posse/bola): 5
+  time trocado (passe anotado do outro time ≤ tol.): 5
+  tempo deslocado (mesmo time entre tol. e 2×tol.): 4
+
+Certo/errado nos casados: concordam 20 de 24; detector diz certo e anotação errado: 1; o contrário: 3

@@ -1,0 +1,26 @@
+{
+  "video": "..\\dados\\videos\\bra_kor_clip.mp4",
+  "modelo": "yolov8m.pt",
+  "device": "cuda",
+  "fps": 30.0,
+  "largura": 1280,
+  "altura": 720,
+  "n_frames": 900,
+  "inicio_s": 19.002,
+  "imgsz": 1280,
+  "conf": 0.3,
+  "conf_bola": 0.1,
+  "fps_processamento": 28.685660517677373,
+  "times_bgr": {
+    "0": [
+      95,
+      104,
+      179
+    ],
+    "1": [
+      53,
+      227,
+      221
+    ]
+  }
+}

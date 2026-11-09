@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anotador de Passes</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --card: #ffffff; --ink: #1d2330; --muted: #667085; --line: #e3e6eb;
+    --dentro: #2f9e44; --dentro-bg: #e6f4ea; --fora: #c92a2a; --fora-bg: #fdecec;
+    --bra: #1c6dd0; --bra-bg: #e7f0fc; --kor: #e8590c; --kor-bg: #fdeee5;
+    --certo: #2f9e44; --inter: #c92a2a; --forab: #868e96; --acc: #5f3dc4;
+    --trilho: #d9dde3; --sombra: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151b; --card: #1b2029; --ink: #e8ebf0; --muted: #98a2b3; --line: #2a313d;
+      --dentro-bg: #163222; --fora-bg: #3a1a1a; --bra-bg: #15263d; --kor-bg: #3a2416;
+      --trilho: #343c49; --sombra: none;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { display: flex; align-items: center; gap: 16px; padding: 10px 18px;
+           background: var(--card); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header h1 { font-size: 16px; margin: 0; }
+  .salvo { font-size: 12px; color: var(--muted); }
+  .salvo.ok { color: var(--certo); } .salvo.erro { color: var(--inter); }
+  .placar { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+  .chip { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .chip.bra { background: var(--bra-bg); color: var(--bra); }
+  .chip.kor { background: var(--kor-bg); color: var(--kor); }
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 14px; padding: 14px 18px; }
+  @media (max-width: 1100px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--sombra); }
+  .player { padding: 10px; }
+  video { width: 100%; display: block; border-radius: 6px; background: #000; aspect-ratio: 16/9; }
+
+  /* linha do tempo estilo YouTube */
+  .tl { position: relative; height: 34px; margin: 10px 2px 2px; cursor: pointer; user-select: none; }
+  .tl .trilho { position: absolute; left: 0; right: 0; top: 13px; height: 8px; background: var(--trilho); border-radius: 4px; overflow: hidden; }
+  .tl .janela { position: absolute; top: 0; height: 100%; background: var(--dentro); opacity: .55; }
+  .tl .janela.atual { opacity: .95; }
+  .tl .mk { position: absolute; top: 4px; width: 3px; height: 26px; border-radius: 2px; transform: translateX(-1px); }
+  .tl .mk.bra { background: var(--bra); } .tl .mk.kor { background: var(--kor); }
+  .tl .mk.erro { opacity: .45; }
+  .tl .cabeca { position: absolute; top: 6px; width: 14px; height: 22px; margin-left: -7px; border-radius: 4px;
+                background: var(--ink); border: 2px solid var(--card); pointer-events: none; }
+  .tl .pend { position: absolute; top: 9px; height: 16px; background: rgba(95,61,196,.35); border-radius: 3px; pointer-events: none; }
+  .tl .dica { position: absolute; top: -26px; transform: translateX(-50%); background: var(--ink); color: var(--card);
+              font-size: 11px; padding: 2px 6px; border-radius: 4px; white-space: nowrap; display: none; pointer-events: none; }
+  .tl:hover .dica { display: block; }
+  .capitulos { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 2px 4px; }
+  .capitulos button { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 6px;
+                      padding: 3px 8px; font-size: 12px; cursor: pointer; }
+  .capitulos button.atual { border-color: var(--dentro); background: var(--dentro-bg); color: var(--dentro); font-weight: 600; }
+  .capitulos button .n { color: var(--muted); font-size: 11px; margin-left: 4px; }
+
+  .controles { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .btn { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 7px;
+         padding: 6px 10px; cursor: pointer; font-size: 13px; font-weight: 500; }
+  .btn:hover { border-color: var(--muted); }
+  .btn.play { background: var(--ink); color: var(--card); border-color: var(--ink); min-width: 84px; }
+  select.btn { padding: 5px 6px; }
+  .tempo { font-variant-numeric: tabular-nums; font-weight: 600; margin-left: 6px; }
+  .tempo small { color: var(--muted); font-weight: 400; }
+  .estado { margin-left: auto; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; }
+  .estado.dentro { background: var(--dentro-bg); color: var(--dentro); }
+  .estado.fora { background: var(--fora-bg); color: var(--fora); }
+  .opcoes { display: flex; gap: 14px; margin-top: 8px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+  .opcoes label { display: flex; gap: 5px; align-items: center; cursor: pointer; }
+
+  /* painel de marcação */
+  .marcar { padding: 12px; margin-top: 12px; }
+  .passos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 700px) { .passos { grid-template-columns: 1fr; } }
+  .passo { border: 2px dashed var(--line); border-radius: 9px; padding: 10px; }
+  .passo.ativo { border-style: solid; border-color: var(--acc); }
+  .passo h3 { margin: 0 0 4px; font-size: 13px; }
+  .passo p { margin: 0 0 8px; font-size: 12px; color: var(--muted); }
+  .grade { display: flex; gap: 8px; flex-wrap: wrap; }
+  .grande { flex: 1 1 120px; padding: 12px 8px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;
+            font-weight: 700; font-size: 14px; }
+  .grande kbd { font: 11px ui-monospace, monospace; padding: 1px 5px; border-radius: 4px; background: rgba(0,0,0,.08); margin-left: 6px; }
+  .grande.bra { background: var(--bra-bg); color: var(--bra); border-color: var(--bra); }
+  .grande.kor { background: var(--kor-bg); color: var(--kor); border-color: var(--kor); }
+  .grande.fora { background: transparent; color: var(--forab); border-color: var(--forab); }
+  .grande:disabled { opacity: .35; cursor: not-allowed; }
+  .pendente { margin-top: 10px; font-size: 13px; padding: 8px 10px; border-radius: 7px; background: var(--bg); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .pendente b { color: var(--acc); }
+
+  /* lista */
+  .lista { display: flex; flex-direction: column; max-height: calc(100vh - 90px); position: sticky; top: 14px; }
+  .lista .topo { padding: 10px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .lista .topo h2 { font-size: 14px; margin: 0; }
+  .lista .topo select { margin-left: auto; }
+  .itens { overflow: auto; flex: 1; }
+  .item { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: center; padding: 7px 12px;
+          border-bottom: 1px solid var(--line); font-size: 13px; }
+  .item.perto { background: var(--bg); }
+  .item .num { color: var(--muted); font-size: 11px; text-align: right; }
+  .item .linha1 { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .item .linha2 { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .item input { width: 100%; font-size: 11px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; background: transparent; color: var(--ink); margin-top: 3px; }
+  .tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; }
+  .tag.bra { background: var(--bra-bg); color: var(--bra); } .tag.kor { background: var(--kor-bg); color: var(--kor); }
+  .tag.certo { background: var(--dentro-bg); color: var(--certo); }
+  .tag.interceptado { background: var(--fora-bg); color: var(--inter); }
+  .tag.fora { background: var(--bg); color: var(--forab); border: 1px solid var(--line); }
+  .acoes { display: flex; gap: 4px; }
+  .mini { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 5px; padding: 2px 6px; cursor: pointer; font-size: 12px; }
+  .vazio { padding: 24px 14px; color: var(--muted); text-align: center; font-size: 13px; }
+  details.ajuda { padding: 10px 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  details.ajuda summary { cursor: pointer; color: var(--ink); font-weight: 600; }
+  details.ajuda table { border-collapse: collapse; margin-top: 6px; }
+  details.ajuda td { padding: 2px 8px 2px 0; vertical-align: top; }
+  kbd.k { font: 11px ui-monospace, monospace; padding: 1px 5px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); }
+  .toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); background: var(--ink); color: var(--card);
+           padding: 9px 16px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 9; }
+  .toast.on { opacity: .95; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Anotador de passes · Brasil × Coreia do Sul</h1>
+  <span id="salvo" class="salvo">carregando…</span>
+  <div class="placar">
+    <span class="chip bra" id="cBra">Brasil: 0</span>
+    <span class="chip kor" id="cKor">Coreia: 0</span>
+    <span class="chip" id="cJan" style="background:var(--dentro-bg);color:var(--dentro)">janelas anotadas: 0/12</span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="card player">
+      <video id="v" src="/video" preload="auto" playsinline></video>
+      <div class="tl" id="tl">
+        <div class="trilho" id="trilho"></div>
+        <div class="dica" id="dica"></div>
+        <div class="cabeca" id="cabeca"></div>
+      </div>
+      <div class="capitulos" id="caps"></div>
+      <div class="controles">
+        <button class="btn" id="bJanAnt" title="Janela anterior (P)">⏮ Janela</button>
+        <button class="btn" id="bM1s" title="−1 s (←)">−1 s</button>
+        <button class="btn" id="bM1q" title="−1 quadro (,)">−1 quadro</button>
+        <button class="btn play" id="bPlay" title="Play/pausa (Espaço)">▶ Play</button>
+        <button class="btn" id="bP1q" title="+1 quadro (.)">+1 quadro</button>
+        <button class="btn" id="bP1s" title="+1 s (→)">+1 s</button>
+        <button class="btn" id="bJanProx" title="Próxima janela (N)">Janela ⏭</button>
+        <select class="btn" id="vel" title="Velocidade ([ e ])">
+          <option value="0.25">0,25×</option><option value="0.5">0,5×</option>
+          <option value="0.75">0,75×</option><option value="1" selected>1×</option>
+          <option value="1.5">1,5×</option><option value="2">2×</option>
+        </select>
+        <span class="tempo" id="tempo">0,00 s <small>· YouTube 4:11</small></span>
+        <span class="estado fora" id="estado">FORA</span>
+      </div>
+      <div class="opcoes">
+        <label><input type="checkbox" id="optPular" checked> pular closes/replays ao tocar</label>
+        <label><input type="checkbox" id="optPausarFim"> pausar no fim de cada janela</label>
+        <label><input type="checkbox" id="optVoltarSaida" checked> após marcar a chegada, voltar ao ponto da chegada e seguir</label>
+      </div>
+    </div>
+
+    <div class="card marcar">
+      <div class="passos">
+        <div class="passo ativo" id="passo1">
+          <h3>1 · Saída da bola</h3>
+          <p>Pause no quadro em que a bola sai do pé do passador e diga quem passou.</p>
+          <div class="grade">
+            <button class="grande bra" id="sBra">Brasil passa <kbd>B</kbd></button>
+            <button class="grande kor" id="sKor">Coreia passa <kbd>C</kbd></button>
+          </div>
+        </div>
+        <div class="passo" id="passo2">
+          <h3>2 · Chegada da bola</h3>
+          <p>Avance até o primeiro toque depois do passe e diga quem ficou com a bola.</p>
+          <div class="grade">
+            <button class="grande bra" id="cBraR" disabled>Brasil recebe <kbd>B</kbd></button>
+            <button class="grande kor" id="cKorR" disabled>Coreia recebe <kbd>C</kbd></button>
+            <button class="grande fora" id="cFora" disabled>Saiu de campo <kbd>F</kbd></button>
+          </div>
+        </div>
+      </div>
+      <div class="pendente" id="pend" style="display:none"></div>
+    </div>
+  </section>
+
+  <aside class="card lista">
+    <div class="topo">
+      <h2>Passes anotados</h2>
+      <select class="mini" id="filtro">
+        <option value="todos">todos</option><option value="janela">só janela atual</option>
+      </select>
+    </div>
+    <div class="itens" id="itens"></div>
+    <details class="ajuda">
+      <summary>Como anotar (atalhos e critérios)</summary>
+      <table>
+        <tr><td><kbd class="k">Espaço</kbd></td><td>play / pausa</td></tr>
+        <tr><td><kbd class="k">,</kbd> <kbd class="k">.</kbd></td><td>−/+ 1 quadro (pausa)</td></tr>
+        <tr><td><kbd class="k">←</kbd> <kbd class="k">→</kbd></td><td>−/+ 1 s &nbsp; (<kbd class="k">Shift</kbd> = 5 s)</td></tr>
+        <tr><td><kbd class="k">[</kbd> <kbd class="k">]</kbd></td><td>mais devagar / mais rápido</td></tr>
+        <tr><td><kbd class="k">N</kbd> <kbd class="k">P</kbd></td><td>próxima / anterior janela</td></tr>
+        <tr><td><kbd class="k">B</kbd> <kbd class="k">C</kbd></td><td>passo 1: quem passa · passo 2: quem recebe</td></tr>
+        <tr><td><kbd class="k">F</kbd></td><td>bola saiu de campo (passe errado)</td></tr>
+        <tr><td><kbd class="k">Esc</kbd></td><td>cancela o passe pendente</td></tr>
+        <tr><td><kbd class="k">Ctrl+Z</kbd></td><td>desfaz o último passe</td></tr>
+      </table>
+      <p><b>Conta:</b> passe intencional para companheiro (rasteiro, alto, cruzamento, lançamento), incluindo os interceptados ou que saem.<br>
+      <b>Não conta:</b> condução/drible, chute a gol, corte/rebatida sem intenção, bola dividida.<br>
+      <b>Caixas do vídeo:</b> azul = Brasil (camisa amarela) · laranja/vermelho = Coreia.<br>
+      Só anote com a faixa <b style="color:var(--dentro)">verde</b> (câmera principal). Em dúvida, não anote.</p>
+    </details>
+  </aside>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const v = $('#v');
+let CFG = null, ANOT = [], PEND = null, salvarTimer = null, ultimoSeg = null;
+
+const NOME = {0: 'Coreia', 1: 'Brasil'};
+const CLS = {0: 'kor', 1: 'bra'};
+const fmt = t => t.toFixed(2).replace('.', ',');
+const yt = t => { const s = t + CFG.offset_youtube_s; return `${Math.floor(s/60)}:${(s%60).toFixed(1).padStart(4,'0')}`; };
+const mmss = t => `${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;
+const segDe = t => { const f = Math.round(t * CFG.fps); return CFG.segmentos.find(s => s.ini <= f && f <= s.fim) || null; };
+const segTempo = s => ({ini: s.ini / CFG.fps, fim: (s.fim + 1) / CFG.fps});
+function toast(msg) { const e = $('#toast'); e.textContent = msg; e.classList.add('on'); clearTimeout(e._t); e._t = setTimeout(() => e.classList.remove('on'), 1800); }
+function seek(t) { v.currentTime = Math.max(0, Math.min(CFG.duracao_s - 0.01, t)); }
+function passoQuadro(d) { v.pause(); seek(v.currentTime + d / CFG.fps); }
+
+async function iniciar() {
+  CFG = await (await fetch('/api/config')).json();
+  ANOT = await (await fetch('/api/anotacoes')).json();
+  // janelas na linha do tempo + capítulos
+  const tr = $('#trilho'), caps = $('#caps');
+  CFG.segmentos.forEach(s => {
+    const {ini, fim} = segTempo(s);
+    const d = document.createElement('div');
+    d.className = 'janela'; d.dataset.seg = s.seg;
+    d.style.left = (100 * ini / CFG.duracao_s) + '%';
+    d.style.width = (100 * (fim - ini) / CFG.duracao_s) + '%';
+    tr.appendChild(d);
+    const b = document.createElement('button');
+    b.dataset.seg = s.seg;
+    b.innerHTML = `Janela ${s.seg} · ${mmss(ini)}–${mmss(fim)}<span class="n" id="capn${s.seg}"></span>`;
+    b.onclick = () => { seek(ini + 0.01); };
+    caps.appendChild(b);
+  });
+  $('#salvo').textContent = ANOT.length ? `${ANOT.length} passes carregados` : 'nenhum passe ainda';
+  render();
+  requestAnimationFrame(loop);
+}
+
+// ── linha do tempo ───────────────────────────────────────────────
+const tl = $('#tl');
+function tDoMouse(e) { const r = tl.getBoundingClientRect(); return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * CFG.duracao_s; }
+let arrastando = false;
+tl.addEventListener('mousedown', e => { arrastando = true; seek(tDoMouse(e)); });
+window.addEventListener('mouseup', () => arrastando = false);
+tl.addEventListener('mousemove', e => {
+  const t = tDoMouse(e), d = $('#dica'), s = segDe(t);
+  d.style.left = (100 * t / CFG.duracao_s) + '%';
+  d.textContent = `${fmt(t)} s · YT ${yt(t)} · ${s ? 'janela ' + s.seg : 'fora'}`;
+  if (arrastando) seek(t);
+});
+
+function loop() {
+  const t = v.currentTime, s = segDe(t);
+  $('#cabeca').style.left = (100 * t / CFG.duracao_s) + '%';
+  $('#tempo').innerHTML = `${fmt(t)} s <small>· YouTube ${yt(t)} · quadro ${Math.round(t * CFG.fps)}</small>`;
+  const est = $('#estado');
+  est.className = 'estado ' + (s ? 'dentro' : 'fora');
+  est.textContent = s ? `CÂMERA PRINCIPAL · janela ${s.seg} — anotar` : 'FORA (close/replay) — não anotar';
+  const segAtual = s ? s.seg : null;
+  if (!v.paused) {
+    if (ultimoSeg !== null && segAtual === null) {
+      if ($('#optPausarFim').checked) { v.pause(); toast('Fim da janela ' + ultimoSeg); }
+      else if ($('#optPular').checked) {
+        const prox = CFG.segmentos.find(x => x.ini / CFG.fps > t);
+        if (prox) { seek(prox.ini / CFG.fps + 0.01); toast('Pulando para a janela ' + prox.seg); }
+      }
+    } else if (ultimoSeg === null && segAtual === null && $('#optPular').checked) {
+      const prox = CFG.segmentos.find(x => x.ini / CFG.fps > t);
+      if (prox) seek(prox.ini / CFG.fps + 0.01);
+    }
+  }
+  if (segAtual !== ultimoSeg) {
+    document.querySelectorAll('.janela, .capitulos button').forEach(e => e.classList.toggle('atual', String(segAtual) === e.dataset.seg));
+    ultimoSeg = segAtual;
+    if ($('#filtro').value === 'janela') renderLista();
+  }
+  if (PEND) {
+    const p = $('.tl .pend');
+    if (p) { const a = Math.min(PEND.t_ini, t), b = Math.max(PEND.t_ini, t);
+      p.style.left = (100 * a / CFG.duracao_s) + '%'; p.style.width = Math.max(0.15, 100 * (b - a) / CFG.duracao_s) + '%'; }
+  }
+  $('#bPlay').textContent = v.paused ? '▶ Play' : '❚❚ Pausa';
+  destacarPerto(t);
+  requestAnimationFrame(loop);
+}
+
+// ── marcação ─────────────────────────────────────────────────────
+function saida(time) {
+  const t = v.currentTime;
+  if (!segDe(t)) { toast('Fora da câmera principal: não anote aqui'); return; }
+  v.pause();
+  PEND = {id: 'p' + Date.now(), t_ini: +t.toFixed(2), time};
+  const p = document.createElement('div'); p.className = 'pend'; tl.appendChild(p);
+  toast(`Saída: ${NOME[time]} em ${fmt(t)} s — agora avance até a chegada`);
+  renderPassos();
+}
+function chegada(timeRecebe) {          // timeRecebe: 0, 1 ou null (fora)
+  if (!PEND) return;
+  const t = v.currentTime;
+  if (t < PEND.t_ini - 0.01) { toast('A chegada precisa ser depois da saída'); return; }
+  const res = timeRecebe === null ? 'fora' : (timeRecebe === PEND.time ? 'certo' : 'interceptado');
+  ANOT.push({...PEND, t_fim: +t.toFixed(2), time_recebe: timeRecebe, resultado: res, obs: ''});
+  const txt = {certo: 'CERTO', interceptado: 'INTERCEPTADO', fora: 'FORA (errado)'}[res];
+  toast(`Passe ${NOME[PEND.time]} ${fmt(PEND.t_ini)}→${fmt(t)} s: ${txt}`);
+  cancelar(false);
+  agendarSalvar(); render();
+}
+function cancelar(msg = true) {
+  PEND = null; const p = $('.tl .pend'); if (p) p.remove();
+  if (msg) toast('Passe pendente cancelado');
+  renderPassos();
+}
+function renderPassos() {
+  $('#passo1').classList.toggle('ativo', !PEND); $('#passo2').classList.toggle('ativo', !!PEND);
+  ['#sBra', '#sKor'].forEach(s => $(s).disabled = !!PEND);
+  ['#cBraR', '#cKorR', '#cFora'].forEach(s => $(s).disabled = !PEND);
+  const pe = $('#pend');
+  if (PEND) {
+    pe.style.display = 'flex';
+    pe.innerHTML = `<span>Pendente: <b>${NOME[PEND.time]}</b> passou em <b>${fmt(PEND.t_ini)} s</b></span>
+      <button class="mini" id="irSaida">↺ voltar à saída</button><button class="mini" id="cancP">cancelar (Esc)</button>`;
+    $('#irSaida').onclick = () => { v.pause(); seek(PEND.t_ini); };
+    $('#cancP').onclick = () => cancelar();
+  } else pe.style.display = 'none';
+}
+
+$('#sBra').onclick = () => saida(1); $('#sKor').onclick = () => saida(0);
+$('#cBraR').onclick = () => chegada(1); $('#cKorR').onclick = () => chegada(0); $('#cFora').onclick = () => chegada(null);
+
+// ── lista ────────────────────────────────────────────────────────
+function render() { renderLista(); renderMarcadores(); renderPlacar(); renderPassos(); }
+function renderMarcadores() {
+  tl.querySelectorAll('.mk').forEach(e => e.remove());
+  ANOT.forEach(a => {
+    const m = document.createElement('div');
+    m.className = `mk ${CLS[a.time]} ${a.resultado !== 'certo' ? 'erro' : ''}`;
+    m.style.left = (100 * a.t_ini / CFG.duracao_s) + '%';
+    m.title = `${NOME[a.time]} ${fmt(a.t_ini)} s · ${a.resultado}`;
+    tl.insertBefore(m, $('#cabeca'));
+  });
+}
+function renderPlacar() {
+  const c = t => { const x = ANOT.filter(a => a.time === t); return `${x.length} (${x.filter(a => a.resultado === 'certo').length} certos)`; };
+  $('#cBra').textContent = 'Brasil: ' + c(1); $('#cKor').textContent = 'Coreia: ' + c(0);
+  const jan = new Set(ANOT.map(a => segDe(a.t_ini)?.seg).filter(x => x !== undefined));
+  $('#cJan').textContent = `janelas com anotação: ${jan.size}/${CFG.segmentos.length}`;
+  CFG.segmentos.forEach(s => { const n = ANOT.filter(a => segDe(a.t_ini)?.seg === s.seg).length; const e = $('#capn' + s.seg); if (e) e.textContent = n ? `(${n})` : ''; });
+}
+function renderLista() {
+  const box = $('#itens');
+  let lst = [...ANOT].sort((a, b) => a.t_ini - b.t_ini);
+  if ($('#filtro').value === 'janela') { const s = segDe(v.currentTime); lst = lst.filter(a => s && segDe(a.t_ini)?.seg === s.seg); }
+  if (!lst.length) { box.innerHTML = '<div class="vazio">Nenhum passe aqui ainda.<br>Toque o vídeo e use <b>B</b>/<b>C</b> na saída e na chegada da bola.</div>'; return; }
+  box.innerHTML = '';
+  lst.forEach((a, i) => {
+    const s = segDe(a.t_ini);
+    const d = document.createElement('div'); d.className = 'item'; d.dataset.t = a.t_ini;
+    const rec = a.time_recebe === null || a.time_recebe === undefined ? (a.resultado === 'fora' ? 'fora de campo' : '?') : NOME[a.time_recebe];
+    d.innerHTML = `<div class="num">${i + 1}</div>
+      <div><div class="linha1"><span class="tag ${CLS[a.time]}">${NOME[a.time]}</span>
+        <span class="tag ${a.resultado}">${a.resultado}</span></div>
+        <div class="linha2">${fmt(a.t_ini)} → ${a.t_fim != null ? fmt(a.t_fim) : '—'} s · recebe: ${rec} · janela ${s ? s.seg : '—'}</div>
+        <input placeholder="observação (opcional)" value="${(a.obs || '').replace(/"/g, '&quot;')}"></div>
+      <div class="acoes"><button class="mini" title="ir para a saída">▶</button><button class="mini" title="trocar time">⇄</button><button class="mini" title="apagar">✕</button></div>`;
+    const [bIr, bTroca, bDel] = d.querySelectorAll('.mini');
+    bIr.onclick = () => { v.pause(); seek(a.t_ini); };
+    bTroca.onclick = () => { a.time = 1 - a.time; if (a.time_recebe !== null && a.time_recebe !== undefined) a.resultado = a.time_recebe === a.time ? 'certo' : 'interceptado'; agendarSalvar(); render(); };
+    bDel.onclick = () => { if (confirm(`Apagar o passe de ${NOME[a.time]} em ${fmt(a.t_ini)} s?`)) { ANOT = ANOT.filter(x => x !== a); agendarSalvar(); render(); } };
+    d.querySelector('input').onchange = e => { a.obs = e.target.value; agendarSalvar(); };
+    box.appendChild(d);
+  });
+}
+function destacarPerto(t) {
+  document.querySelectorAll('.item').forEach(e => e.classList.toggle('perto', Math.abs(+e.dataset.t - t) < 1));
+}
+$('#filtro').onchange = renderLista;
+
+// ── salvar ───────────────────────────────────────────────────────
+function agendarSalvar() {
+  $('#salvo').className = 'salvo'; $('#salvo').textContent = 'salvando…';
+  clearTimeout(salvarTimer); salvarTimer = setTimeout(salvar, 400);
+}
+async function salvar() {
+  try {
+    const r = await fetch('/api/anotacoes', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(ANOT)});
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.erro);
+    $('#salvo').className = 'salvo ok'; $('#salvo').textContent = `✓ salvo (${j.n} passes) em passes_anotados.csv`;
+  } catch (e) { $('#salvo').className = 'salvo erro'; $('#salvo').textContent = 'erro ao salvar: ' + e.message; }
+}
+
+// ── controles ────────────────────────────────────────────────────
+function playPausa() { v.paused ? v.play() : v.pause(); }
+function janela(d) {
+  const t = v.currentTime, segs = CFG.segmentos;
+  const alvo = d > 0 ? segs.find(s => s.ini / CFG.fps > t + 0.05) : [...segs].reverse().find(s => s.ini / CFG.fps < t - 0.5);
+  if (alvo) seek(alvo.ini / CFG.fps + 0.01);
+}
+function vel(d) { const sel = $('#vel'); const i = Math.max(0, Math.min(sel.options.length - 1, sel.selectedIndex + d)); sel.selectedIndex = i; v.playbackRate = +sel.value; toast(`Velocidade ${sel.options[i].text}`); }
+$('#bPlay').onclick = playPausa;
+$('#bM1s').onclick = () => seek(v.currentTime - 1); $('#bP1s').onclick = () => seek(v.currentTime + 1);
+$('#bM1q').onclick = () => passoQuadro(-1); $('#bP1q').onclick = () => passoQuadro(1);
+$('#bJanAnt').onclick = () => janela(-1); $('#bJanProx').onclick = () => janela(1);
+$('#vel').onchange = e => v.playbackRate = +e.target.value;
+v.addEventListener('click', playPausa);
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' && e.key !== ' ') return;
+  const k = e.key.toLowerCase();
+  if (e.ctrlKey && k === 'z') { e.preventDefault(); const u = ANOT.pop(); if (u) { toast(`Desfeito: ${NOME[u.time]} ${fmt(u.t_ini)} s`); agendarSalvar(); render(); } return; }
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (k === ' ') { e.preventDefault(); playPausa(); }
+  else if (k === ',') passoQuadro(-1);
+  else if (k === '.') passoQuadro(1);
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); seek(v.currentTime - (e.shiftKey ? 5 : 1)); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); seek(v.currentTime + (e.shiftKey ? 5 : 1)); }
+  else if (k === '[') vel(-1);
+  else if (k === ']') vel(1);
+  else if (k === 'n') janela(1);
+  else if (k === 'p') janela(-1);
+  else if (k === 'b') PEND ? chegada(1) : saida(1);
+  else if (k === 'c') PEND ? chegada(0) : saida(0);
+  else if (k === 'f') chegada(null);
+  else if (e.key === 'Escape') { if (PEND) cancelar(); }
+});
+
+iniciar();
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "parametros": {
+    "raio_pressao_m": 5.0,
+    "min_jogadores": 6
+  },
+  "quadros_bloco_validos": 6492,
+  "time0": {
+    "area_bloco_m2_com_bola": 633.91,
+    "area_bloco_m2_sem_bola": 616.12,
+    "largura_m": 39.46,
+    "profundidade_m": 26.5,
+    "linha_defensiva_m_sem_bola": 30.39,
+    "posse_por_terco_pct": {
+      "defensivo": 68.18,
+      "medio": 22.29,
+      "ofensivo": 9.53
+    },
+    "field_tilt_pct": 20.13,
+    "pressao_media_sobre_portador": 0.2,
+    "n_posses": 17,
+    "duracao_media_posse_s": 7.67,
+    "passes_por_posse": 0.65,
+    "progressao_media_m_s": 0.91,
+    "recuperacoes": 17,
+    "altura_media_recuperacao_m": 34.06
+  },
+  "time1": {
+    "area_bloco_m2_com_bola": 812.07,
+    "area_bloco_m2_sem_bola": 569.91,
+    "largura_m": 41.91,
+    "profundidade_m": 26.96,
+    "linha_defensiva_m_sem_bola": 55.9,
+    "posse_por_terco_pct": {
+      "defensivo": 12.72,
+      "medio": 56.74,
+      "ofensivo": 30.54
+    },
+    "field_tilt_pct": 79.87,
+    "pressao_media_sobre_portador": 0.52,
+    "n_posses": 17,
+    "duracao_media_posse_s": 8.43,
+    "passes_por_posse": 1.06,
+    "progressao_media_m_s": 0.52,
+    "recuperacoes": 16,
+    "altura_media_recuperacao_m": 64.68
+  }
+}

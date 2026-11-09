@@ -1,0 +1,4 @@
+﻿Bola detectada pelo YOLO :  7448 / 9390 quadros (79.3%), 12820 candidatas
+Aceitas após gating      :  4848
+Preenchidas pelo Kalman  :  3781
+Cobertura final          : 91.9%  →  ..\saidas\jogo1\bola.csv

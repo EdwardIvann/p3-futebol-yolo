@@ -1,0 +1,80 @@
+tipo,t_det_s,t_anot_s,time,sucesso_det,resultado_anot,obs
+falso_negativo,,3.4,0,,certo,bola no campo 15% do trecho; dur 2.22 s
+falso_negativo,,5.62,0,,certo,bola no campo 0% do trecho; dur 1.69 s
+falso_negativo,,7.33,0,,interceptado,bola no campo 7% do trecho; dur 1.76 s
+falso_negativo,,9.1,1,,certo,bola no campo 52% do trecho; dur 0.81 s
+falso_negativo,,9.94,1,,certo,bola no campo 65% do trecho; dur 1.09 s
+casado,12.53,12.38,1,1.0,certo,
+casado,15.27,15.17,1,1.0,certo,
+falso_negativo,,17.67,1,,certo,bola no campo 100% do trecho; dur 1.05 s
+falso_negativo,,19.57,1,,certo,bola no campo 0% do trecho; dur 1.09 s
+falso_negativo,,21.67,1,,certo,bola no campo 100% do trecho; dur 0.95 s
+falso_negativo,,25.61,1,,certo,bola no campo 100% do trecho; dur 1.99 s
+falso_negativo,,29.97,1,,certo,bola no campo 100% do trecho; dur 1.90 s
+falso_negativo,,33.21,1,,certo,bola no campo 100% do trecho; dur 1.66 s
+casado,36.63,36.49,1,1.0,certo,
+casado,37.57,37.42,1,1.0,certo,
+casado,40.23,40.07,1,0.0,certo,
+falso_negativo,,43.02,1,,certo,bola no campo 51% do trecho; dur 2.64 s
+falso_negativo,,46.82,1,,interceptado,bola no campo 0% do trecho; dur 0.86 s
+casado,48.97,49.13,0,1.0,certo,
+falso_negativo,,51.13,0,,interceptado,bola no campo 100% do trecho; dur 2.17 s
+falso_negativo,,53.31,1,,interceptado,bola no campo 100% do trecho; dur 1.89 s
+casado,55.9,55.23,0,1.0,certo,
+falso_negativo,,58.9,0,,certo,bola no campo 17% do trecho; dur 3.41 s
+falso_negativo,,71.53,1,,certo,bola no campo 76% do trecho; dur 1.20 s
+falso_negativo,,74.0,1,,certo,bola no campo 100% do trecho; dur 1.93 s
+casado,77.07,76.94,1,1.0,certo,
+falso_negativo,,82.47,1,,certo,bola no campo 100% do trecho; dur 1.12 s
+casado,83.83,83.62,1,1.0,certo,
+falso_negativo,,84.41,1,,interceptado,bola no campo 0% do trecho; dur 0.56 s
+falso_negativo,,86.69,0,,certo,bola no campo 100% do trecho; dur 1.15 s
+casado,105.1,104.64,1,0.0,certo,
+falso_negativo,,109.77,1,,certo,bola no campo 19% do trecho; dur 1.35 s
+falso_negativo,,111.83,1,,certo,bola no campo 0% do trecho; dur 0.83 s
+falso_negativo,,114.16,1,,certo,bola no campo 53% do trecho; dur 2.55 s
+falso_negativo,,118.2,1,,fora,bola no campo 84% do trecho; dur 1.87 s
+falso_negativo,,144.08,0,,certo,bola no campo 4% do trecho; dur 1.55 s
+falso_negativo,,147.97,0,,certo,bola no campo 77% do trecho; dur 0.99 s
+casado,150.57,150.33,0,1.0,certo,
+falso_negativo,,154.47,0,,certo,bola no campo 11% do trecho; dur 4.82 s
+casado,177.27,177.21,1,1.0,certo,
+falso_negativo,,185.47,1,,certo,bola no campo 100% do trecho; dur 1.37 s
+casado,187.63,187.52,1,1.0,certo,
+casado,189.5,190.38,1,1.0,certo,
+falso_negativo,,191.32,1,,interceptado,bola no campo 100% do trecho; dur 1.48 s
+casado,217.73,217.58,0,1.0,certo,
+casado,218.7,218.57,0,1.0,certo,
+casado,222.73,222.67,0,1.0,certo,
+casado,229.47,229.34,0,1.0,certo,
+casado,233.1,232.9,0,1.0,certo,
+falso_negativo,,237.46,0,,interceptado,bola no campo 93% do trecho; dur 1.44 s
+falso_negativo,,238.92,1,,interceptado,bola no campo 65% do trecho; dur 3.15 s
+falso_negativo,,242.11,0,,interceptado,bola no campo 32% do trecho; dur 2.11 s
+casado,268.07,267.95,1,1.0,certo,
+falso_negativo,,271.71,1,,certo,bola no campo 100% do trecho; dur 0.95 s
+casado,274.5,274.35,1,1.0,certo,
+falso_negativo,,281.13,1,,certo,bola no campo 100% do trecho; dur 1.29 s
+casado,283.73,284.08,1,1.0,certo,
+falso_negativo,,288.01,1,,certo,bola no campo 100% do trecho; dur 1.06 s
+falso_negativo,,289.11,1,,certo,bola no campo 77% do trecho; dur 0.84 s
+casado,291.2,290.97,1,0.0,certo,
+falso_negativo,,293.33,1,,certo,bola no campo 100% do trecho; dur 1.82 s
+falso_negativo,,300.86,1,,certo,bola no campo 100% do trecho; dur 0.64 s
+casado,302.63,302.35,1,1.0,interceptado,
+falso_negativo,,303.16,0,,interceptado,bola no campo 100% do trecho; dur 1.42 s
+falso_negativo,,307.34,1,,certo,bola no campo 100% do trecho; dur 1.87 s
+falso_positivo,52.2,,0,1.0,,tempo deslocado (mesmo time entre tol. e 2×tol.)
+falso_positivo,72.83,,1,1.0,,tempo deslocado (mesmo time entre tol. e 2×tol.)
+falso_positivo,108.73,,0,0.0,,sem passe anotado perto (ruído de posse/bola)
+falso_positivo,180.23,,1,1.0,,sem passe anotado perto (ruído de posse/bola)
+falso_positivo,191.77,,0,1.0,,time trocado (passe anotado do outro time ≤ tol.)
+falso_positivo,245.77,,1,0.0,,sem passe anotado perto (ruído de posse/bola)
+falso_positivo,268.97,,1,1.0,,tempo deslocado (mesmo time entre tol. e 2×tol.)
+falso_positivo,269.43,,1,1.0,,tempo deslocado (mesmo time entre tol. e 2×tol.)
+falso_positivo,271.87,,0,0.0,,time trocado (passe anotado do outro time ≤ tol.)
+falso_positivo,292.67,,0,0.0,,time trocado (passe anotado do outro time ≤ tol.)
+falso_positivo,295.43,,1,1.0,,sem passe anotado perto (ruído de posse/bola)
+falso_positivo,300.23,,0,1.0,,time trocado (passe anotado do outro time ≤ tol.)
+falso_positivo,300.87,,0,0.0,,time trocado (passe anotado do outro time ≤ tol.)
+falso_positivo,305.3,,1,0.0,,sem passe anotado perto (ruído de posse/bola)

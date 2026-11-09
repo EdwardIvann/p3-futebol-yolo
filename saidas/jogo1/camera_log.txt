@@ -1,0 +1,9 @@
+﻿
+System.Management.Automation.RemoteException
+Homografias salvas em ..\saidas\jogo1\camera.npy (9390 quadros, 1968 quadros-chave, 699 falhas)
+ATENÇÃO: 15 possível(is) corte(s) de câmera em ['125.6s', '127.7s', '131.8s', '138.1s', '140.8s', '143.1s', '165.3s', 
+'167.6s', '169.2s', '171.8s', '214.1s', '217.4s', '245.8s', '257.6s', '295.5s'].
+  Após um corte a projeção deixa de valer: use um trecho sem cortes ou
+  divida o vídeo em segmentos e calibre cada um separadamente.
+
+
